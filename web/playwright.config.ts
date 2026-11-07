@@ -9,13 +9,13 @@ export default defineConfig({
   reporter: [['list']],
   globalTeardown: './e2e/teardown.ts',
   use: {
-    baseURL: 'http://localhost:5180',
+    baseURL: process.env.BASE_URL || 'http://localhost:5180',
     ...devices['Pixel 7'],
     launchOptions: { executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium' },
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },
-  webServer: {
+  webServer: process.env.BASE_URL ? undefined : {
     command: 'npm run dev -- --port 5180 --strictPort',
     url: 'http://localhost:5180',
     reuseExistingServer: true,
