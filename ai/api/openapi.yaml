@@ -1,0 +1,260 @@
+openapi: 3.1.0
+info:
+  title: Lost & Found AI API
+  version: 1.0.0
+  description: Privileged and AI API. React uses Supabase directly for email OTP, session refresh, signed-upload execution and Realtime.
+servers:
+  - url: http://localhost:5000/v1
+    description: Local
+tags:
+  - {name: Account}
+  - {name: Claimant}
+  - {name: Claims}
+  - {name: Staff}
+  - {name: Pickup}
+security:
+  - bearerAuth: []
+paths:
+  /health:
+    get:
+      security: []
+      summary: Process health
+      responses: {'200': {description: Healthy, content: {application/json: {schema: {$ref: '#/components/schemas/HealthResponse'}}}}}
+  /me:
+    get:
+      tags: [Account]
+      summary: Resolve role and profile after Supabase OTP login
+      responses:
+        '200': {description: Staff or claimant identity, content: {application/json: {schema: {$ref: '#/components/schemas/MeResponse'}}}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+    put:
+      tags: [Account]
+      summary: Create or update claimant profile
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/ProfileInput'}}}}
+      responses: {'200': {description: Updated profile}, '422': {$ref: '#/components/responses/Validation'}}
+    delete:
+      tags: [Account]
+      summary: Withdraw open claims and delete claimant profile
+      requestBody: {required: true, content: {application/json: {schema: {type: object, required: [confirmation], properties: {confirmation: {type: string, const: DELETE}}}}}}
+      responses: {'204': {description: Deleted}, '422': {$ref: '#/components/responses/Validation'}}
+  /places:
+    get:
+      tags: [Claimant]
+      summary: List places and available-item counts
+      parameters:
+        - {in: query, name: lat, schema: {type: number}}
+        - {in: query, name: lng, schema: {type: number}}
+        - {in: query, name: limit, schema: {type: integer, default: 10, maximum: 50}}
+      responses: {'200': {description: Places, content: {application/json: {schema: {$ref: '#/components/schemas/ListResponse'}}}}}
+  /items/recent:
+    get:
+      tags: [Claimant]
+      summary: Recently found public items
+      parameters:
+        - {in: query, name: limit, schema: {type: integer, default: 20, maximum: 50}}
+      responses: {'200': {description: Public item cards}}
+  /items/{item_id}:
+    get:
+      tags: [Claimant]
+      summary: Public item details; never returns private description
+      parameters: [{$ref: '#/components/parameters/ItemId'}]
+      responses: {'200': {description: Public item}, '404': {$ref: '#/components/responses/NotFound'}}
+  /search:
+    post:
+      tags: [Claimant]
+      summary: Parse and search public item data
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/SearchInput'}}}}
+      responses:
+        '200': {description: Parsed query and ranked results, content: {application/json: {schema: {$ref: '#/components/schemas/SearchResponse'}}}}
+        '422': {$ref: '#/components/responses/Validation'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+  /claims:
+    post:
+      tags: [Claims]
+      summary: Start claim chat with first answer
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/ClaimCreate'}}}}
+      responses: {'201': {description: Claim and safe bot reply}, '409': {description: Duplicate or unclaimable item}, '429': {$ref: '#/components/responses/RateLimited'}}
+    get:
+      tags: [Claims]
+      summary: List the signed-in claimant's requests
+      responses: {'200': {description: Claims newest first}}
+  /claims/{claim_id}/messages:
+    post:
+      tags: [Claims]
+      summary: Answer a safe follow-up
+      parameters: [{$ref: '#/components/parameters/ClaimId'}]
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/ClaimMessage'}}}}
+      responses: {'200': {description: Next safe question or done true}, '409': {description: Chat already completed}, '429': {$ref: '#/components/responses/RateLimited'}}
+  /claims/{claim_id}/proof/upload-url:
+    post:
+      tags: [Claims]
+      summary: Create a signed proof-photo upload URL
+      parameters: [{$ref: '#/components/parameters/ClaimId'}]
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/UploadRequest'}}}}
+      responses: {'200': {description: Signed upload URL}}
+  /claims/{claim_id}/pickup:
+    get:
+      tags: [Claims]
+      summary: Get QR token, decrypted six-digit code and expiry for an approved owned claim
+      parameters: [{$ref: '#/components/parameters/ClaimId'}]
+      responses: {'200': {description: Pickup card data}, '409': {description: Claim is not approved}}
+  /push/subscriptions:
+    post:
+      tags: [Account]
+      summary: Register a Web Push subscription
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/PushSubscription'}}}}
+      responses: {'201': {description: Registered}}
+    delete:
+      tags: [Account]
+      summary: Remove a Web Push subscription
+      requestBody: {required: true, content: {application/json: {schema: {type: object, required: [endpoint], properties: {endpoint: {type: string, format: uri}}}}}}
+      responses: {'204': {description: Removed}}
+  /staff/dashboard:
+    get:
+      tags: [Staff]
+      summary: Organization stats and claims needing attention
+      responses: {'200': {description: Dashboard}, '403': {$ref: '#/components/responses/Forbidden'}}
+  /staff/locations:
+    get:
+      tags: [Staff]
+      summary: Organization locations for item forms
+      responses: {'200': {description: Locations}}
+  /staff/uploads:
+    post:
+      tags: [Staff]
+      summary: Create signed item-photo upload URLs
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/UploadRequest'}}}}
+      responses: {'200': {description: Signed URLs}, '422': {$ref: '#/components/responses/Validation'}}
+  /staff/items/suggest:
+    post:
+      tags: [Staff]
+      summary: Suggest generic title, category and colours from uploaded photos
+      requestBody: {required: true, content: {application/json: {schema: {type: object, required: [image_paths], properties: {image_paths: {type: array, minItems: 2, maxItems: 6, items: {type: string}}}}}}}
+      responses: {'200': {description: Editable AI suggestions}}
+  /staff/items:
+    post:
+      tags: [Staff]
+      summary: Publish item, photos, secret details and search embedding
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/ItemCreate'}}}}
+      responses: {'201': {description: Published item}, '422': {$ref: '#/components/responses/Validation'}}
+    get:
+      tags: [Staff]
+      summary: List organization items
+      parameters:
+        - {in: query, name: status, schema: {$ref: '#/components/schemas/ItemStatus'}}
+        - {in: query, name: location_id, schema: {type: string, format: uuid}}
+        - {in: query, name: q, schema: {type: string, maxLength: 100}}
+      responses: {'200': {description: Organization items}}
+  /staff/items/{item_id}:
+    get:
+      tags: [Staff]
+      summary: Staff item detail including guarded secret
+      parameters: [{$ref: '#/components/parameters/ItemId'}]
+      responses: {'200': {description: Staff item detail}}
+    patch:
+      tags: [Staff]
+      summary: Edit an organization item
+      parameters: [{$ref: '#/components/parameters/ItemId'}]
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/ItemUpdate'}}}}
+      responses: {'200': {description: Updated item}, '422': {$ref: '#/components/responses/Validation'}}
+  /staff/items/{item_id}/archive:
+    post:
+      tags: [Staff]
+      summary: Archive an item without an approved pickup
+      parameters: [{$ref: '#/components/parameters/ItemId'}]
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/ArchiveInput'}}}}
+      responses: {'200': {description: Archived}, '409': {description: Approved claim blocks archive}}
+  /staff/items/{item_id}/claims:
+    get:
+      tags: [Staff]
+      summary: Claims sorted by confidence
+      parameters: [{$ref: '#/components/parameters/ItemId'}]
+      responses: {'200': {description: Ranked claims}}
+  /staff/claims/{claim_id}:
+    get:
+      tags: [Staff]
+      summary: Claim rationale, transcript and proof
+      parameters: [{$ref: '#/components/parameters/ClaimId'}]
+      responses: {'200': {description: Claim review detail}}
+  /staff/claims/{claim_id}/approve:
+    post:
+      tags: [Staff]
+      summary: Atomically approve claim, close others and issue pickup
+      parameters: [{$ref: '#/components/parameters/ClaimId'}]
+      requestBody: {required: false, content: {application/json: {schema: {type: object, properties: {pickup_expires_at: {type: string, format: date-time}}}}}}
+      responses: {'200': {description: Approved}, '409': {description: Already decided}}
+  /staff/claims/{claim_id}/rescore:
+    post:
+      tags: [Staff]
+      summary: Retry deterministic claim scoring
+      parameters: [{$ref: '#/components/parameters/ClaimId'}]
+      responses: {'200': {description: Updated score and rationale}, '404': {$ref: '#/components/responses/NotFound'}}
+  /staff/claims/{claim_id}/reject:
+    post:
+      tags: [Staff]
+      summary: Reject a claim with an internal reason
+      parameters: [{$ref: '#/components/parameters/ClaimId'}]
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/RejectInput'}}}}
+      responses: {'200': {description: Rejected}, '422': {$ref: '#/components/responses/Validation'}}
+  /staff/pickups/verify:
+    post:
+      tags: [Pickup]
+      summary: Verify either QR token or six-digit code in staff organization
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/PickupVerify'}}}}
+      responses: {'200': {description: Safe claimant and item preview}, '404': {description: Invalid code}, '409': {description: Expired or used}}
+  /staff/pickups/{claim_id}/handover:
+    post:
+      tags: [Pickup]
+      summary: Atomically mark pickup collected and item returned
+      parameters: [{$ref: '#/components/parameters/ClaimId'}]
+      responses: {'200': {description: Collected}, '409': {description: Pickup unavailable}}
+components:
+  securitySchemes:
+    bearerAuth: {type: http, scheme: bearer, bearerFormat: Supabase JWT}
+  parameters:
+    ItemId: {in: path, name: item_id, required: true, schema: {type: string, format: uuid}}
+    ClaimId: {in: path, name: claim_id, required: true, schema: {type: string, format: uuid}}
+  responses:
+    Unauthorized: {description: Missing or expired Supabase JWT, content: {application/json: {schema: {$ref: '#/components/schemas/ErrorResponse'}}}}
+    Forbidden: {description: Wrong role or organization, content: {application/json: {schema: {$ref: '#/components/schemas/ErrorResponse'}}}}
+    NotFound: {description: Resource not found, content: {application/json: {schema: {$ref: '#/components/schemas/ErrorResponse'}}}}
+    Validation: {description: Validation error, content: {application/json: {schema: {$ref: '#/components/schemas/ErrorResponse'}}}}
+    RateLimited: {description: Rate limit exceeded, content: {application/json: {schema: {$ref: '#/components/schemas/ErrorResponse'}}}}
+  schemas:
+    HealthResponse: {type: object, properties: {data: {type: object, properties: {status: {type: string, const: ok}}}}}
+    ListResponse: {type: object, properties: {data: {type: array, items: {type: object}}}}
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties: {error: {type: object, required: [code, message, request_id], properties: {code: {type: string}, message: {type: string}, fields: {type: object, additionalProperties: {type: string}}, request_id: {type: string}}}}
+    ItemStatus: {type: string, enum: [available, claim_pending, ready_for_pickup, returned, archived]}
+    ClaimStatus: {type: string, enum: [submitted, under_review, approved, not_selected, rejected, collected, withdrawn]}
+    ProfileInput:
+      type: object
+      required: [full_name]
+      properties: {full_name: {type: string, minLength: 2, maxLength: 50}, phone: {type: string}, notifications_enabled: {type: boolean, default: true}, location_enabled: {type: boolean, default: false}}
+    MeResponse: {type: object, properties: {data: {type: object, required: [user_id, role], properties: {user_id: {type: string, format: uuid}, email: {type: string, format: email}, role: {type: string, enum: [claimant, staff]}, needs_onboarding: {type: boolean}, profile: {type: [object, 'null']}, staff: {type: [object, 'null']}}}}}
+    SearchInput:
+      type: object
+      required: [q]
+      properties: {q: {type: string, minLength: 2, maxLength: 100}, lat: {type: number, minimum: -90, maximum: 90}, lng: {type: number, minimum: -180, maximum: 180}, location_id: {type: [string, 'null'], format: uuid}, page: {type: integer, default: 1, minimum: 1}, limit: {type: integer, default: 20, maximum: 50}}
+    SearchResponse: {type: object, properties: {data: {type: object, properties: {parsed: {type: object}, results: {type: array, items: {type: object}}}}, pagination: {type: object}}}
+    ClaimCreate: {type: object, required: [item_id, message], properties: {item_id: {type: string, format: uuid}, message: {type: string, minLength: 15, maxLength: 1000}}}
+    ClaimMessage: {type: object, required: [message], properties: {message: {type: string, minLength: 1, maxLength: 500}}}
+    UploadRequest:
+      type: object
+      required: [files]
+      properties: {files: {type: array, minItems: 1, maxItems: 6, items: {type: object, required: [filename, content_type, size_bytes], properties: {filename: {type: string}, content_type: {type: string, enum: [image/jpeg, image/png, image/webp, image/heic, image/heif]}, size_bytes: {type: integer, maximum: 10485760}}}}}
+    ItemImage: {type: object, required: [path, position, is_cover], properties: {path: {type: string}, position: {type: integer, minimum: 0, maximum: 5}, is_cover: {type: boolean}}}
+    ItemCreate:
+      type: object
+      required: [title, category, location_id, found_at, private_description, images]
+      properties: {title: {type: string, minLength: 3, maxLength: 60}, category: {type: string}, colours: {type: array, maxItems: 5, items: {type: string}}, tags: {type: array, maxItems: 8, items: {type: string, minLength: 2, maxLength: 24}}, location_id: {type: string, format: uuid}, exact_spot: {type: [string, 'null'], maxLength: 80}, found_at: {type: string, format: date-time}, private_description: {type: string, minLength: 20, maxLength: 1000}, images: {type: array, minItems: 2, maxItems: 6, items: {$ref: '#/components/schemas/ItemImage'}}}
+    ItemUpdate: {type: object, properties: {title: {type: string, minLength: 3, maxLength: 60}, category: {type: string}, colours: {type: array, items: {type: string}}, tags: {type: array, maxItems: 8, items: {type: string}}, location_id: {type: string, format: uuid}, exact_spot: {type: [string, 'null'], maxLength: 80}, found_at: {type: string, format: date-time}}}
+    ArchiveInput: {type: object, required: [reason], properties: {reason: {type: string, enum: [donated, disposed, police, other]}, note: {type: [string, 'null'], maxLength: 500}}}
+    RejectInput: {type: object, required: [reason], properties: {reason: {type: string, enum: [details_mismatch, already_returned, suspected_false_claim, other]}, note: {type: [string, 'null'], minLength: 5, maxLength: 200}}}
+    PickupVerify:
+      oneOf:
+        - {type: object, required: [code], properties: {code: {type: string, pattern: '^\d{6}$'}}}
+        - {type: object, required: [qr_token], properties: {qr_token: {type: string}}}
+    PushSubscription: {type: object, required: [endpoint, keys], properties: {endpoint: {type: string, format: uri}, keys: {type: object, required: [p256dh, auth], properties: {p256dh: {type: string}, auth: {type: string}}}}}

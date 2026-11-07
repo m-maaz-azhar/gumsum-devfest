@@ -339,6 +339,11 @@ route('POST', '/claims', async ({ db, me, body }) => {
   const item = db.items.find((i) => i.id === body.item_id)
   if (!item || !isPublic(item)) fail(403, 'NOT_CLAIMABLE', 'This item can’t be claimed right now.')
   const existing = db.claims.find((c) => c.item_id === item!.id && c.claimant_id === me.id)
+  if (existing && !existing.chat_done && existing.status === 'submitted') {
+    // Unfinished chat (sheet closed mid-way): resume it instead of blocking the claimant.
+    db.messages.push({ id: uid(), claim_id: existing.id, role: 'user', content: message, created_at: now() })
+    return botTurn(db, existing)
+  }
   if (existing) fail(403, 'ALREADY_CLAIMED', existing.status === 'rejected' ? 'You can’t claim this item again.' : 'You already have a request for this item.')
   const dayAgo = Date.now() - 86_400_000
   if (db.claimLog.filter((l) => l.user_id === me.id && new Date(l.at).getTime() > dayAgo).length >= 5)
@@ -363,6 +368,12 @@ route('POST', '/claims/:id/messages', async ({ db, me, body, params }) => {
   if (isFlagged(message)) fail(422, 'MODERATION', 'Please keep it respectful.')
   db.messages.push({ id: uid(), claim_id: c.id, role: 'user', content: message, created_at: now() })
   return botTurn(db, c)
+})
+
+// Scoring already runs in the mock's own background timer; this mirrors the real endpoint.
+route('POST', '/claims/:id/score', async ({ db, me, params }) => {
+  db.claims.find((x) => x.id === params.id && x.claimant_id === me.id) ?? fail(404, 'NOT_FOUND', 'Request not found.')
+  return { ok: true }
 })
 
 route('POST', '/claims/:id/proof-upload-url', async ({ db, me, params }) => {

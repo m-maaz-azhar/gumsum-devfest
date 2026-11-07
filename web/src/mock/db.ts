@@ -6,7 +6,7 @@ import { computeScore, type Rationale } from './ai/score'
 import type { ClaimStatus, ItemStatus, ScoreState } from '../shared/api/types'
 
 const store = createStore('gumsum-mock', 'kv')
-const DB_KEY = 'db-v1'
+const DB_KEY = 'db-v2'
 
 export interface MLocation {
   id: string; org_id: string; slug: string; name: string; address: string; lat: number; lng: number; desk_hours: string
@@ -80,7 +80,7 @@ export function buildSeed(now = Date.now()): MockDb {
     locations,
     items,
     images: seed.items.flatMap((i) =>
-      [1, 2].map((n) => ({ id: `${i.id}-${n}`, item_id: i.id, path: `seed/${i.image}-${n}.jpg`, position: n - 1, is_cover: n === 1 })),
+      Array.from({ length: (i as { images?: number }).images ?? 2 }, (_, k) => k + 1).map((n) => ({ id: `${i.id}-${n}`, item_id: i.id, path: `seed/${i.image}-${n}.jpg`, position: n - 1, is_cover: n === 1 })),
     ),
     secrets: seed.items.map((i) => ({ item_id: i.id, private_description: i.private_description, details: i.details })),
     profiles: seed.claimants.map((c) => ({

@@ -26,11 +26,15 @@ export async function otpFor(email: string): Promise<string> {
   return json.email_otp
 }
 
-/** Open the app with a fresh mock database. */
+export const REAL_API = process.env.E2E_API === 'real'
+
+/** Open the app with a fresh mock database (real-API runs are reset once by e2e/setup-real.ts). */
 export async function freshApp(page: Page) {
   await page.goto('/welcome')
-  await page.waitForFunction(() => (window as any).__gumsum)
-  await page.evaluate(() => (window as any).__gumsum.resetMock())
+  if (!REAL_API) {
+    await page.waitForFunction(() => (window as any).__gumsum)
+    await page.evaluate(() => (window as any).__gumsum.resetMock())
+  }
   await page.evaluate(() => localStorage.clear())
 }
 

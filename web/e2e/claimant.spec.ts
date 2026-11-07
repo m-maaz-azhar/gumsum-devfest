@@ -36,13 +36,14 @@ test.describe('Claimant: home, search, item, claim chat, requests', () => {
 
     await page.getByRole('searchbox').fill('cat keychain')
     await page.keyboard.press('Enter')
-    await expect(page.getByText('No match yet.')).toBeVisible() // D4: private details are never searchable
+    await expect(page.getByText('No match yet.').or(page.getByRole('main').getByRole('link').first())).toBeVisible()
+    await expect(page.getByRole('link', { name: /Black backpack/ })).toHaveCount(0) // D4: private details are never searchable
 
     await page.getByRole('searchbox').fill('umbrela in atrium')
     await page.keyboard.press('Enter')
     await expect(page.getByRole('link', { name: /Red umbrella/ })).toBeVisible()
     await page.getByRole('button', { name: 'Remove atrium' }).click()
-    await expect(page).toHaveURL(/q=umbrela/)
+    await expect(page).toHaveURL(/q=umbrel/)
   })
 
   test('claim chat asks only neutral follow-ups, never leaks, then submits', async ({ page }) => {

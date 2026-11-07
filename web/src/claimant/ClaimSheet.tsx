@@ -78,6 +78,8 @@ export function ClaimSheet({ open, onClose, item }: { open: boolean; onClose: ()
       setFollowupsLeft(turn.followups_left)
       if (turn.reply) setMessages((m) => [...m, { id: nextId.current++, role: 'bot', content: turn.reply! }])
       if (turn.done) {
+        // Kick off AI scoring in its own request (serverless-safe); the claimant doesn't wait for it.
+        api.post(`/claims/${turn.claim_id}/score`).then(() => invalidate()).catch(() => {})
         setDone(true)
         vibrate(20)
         markFirstClaimSubmitted()

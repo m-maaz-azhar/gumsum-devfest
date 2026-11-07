@@ -1,117 +1,379 @@
 {
   "organizations": [
-    { "id": "0b0e0000-0000-4000-8000-000000000001", "slug": "atrium-mall", "name": "Atrium Mall" },
-    { "id": "0b0e0000-0000-4000-8000-000000000002", "slug": "devfest-2026", "name": "DevFest 2026" }
+    {
+      "id": "0b0e0000-0000-4000-8000-000000000001",
+      "slug": "atrium-mall",
+      "name": "Atrium Mall"
+    },
+    {
+      "id": "0b0e0000-0000-4000-8000-000000000002",
+      "slug": "devfest-2026",
+      "name": "DevFest 2026"
+    }
   ],
   "locations": [
-    { "id": "10c00000-0000-4000-8000-000000000001", "org": "atrium-mall", "slug": "atrium-mall-main", "name": "Atrium Mall", "address": "Zaibunnisa Street, Saddar, Karachi", "lat": 24.8569, "lng": 67.0281, "desk_hours": "Mon–Sun 10:00–22:00" },
-    { "id": "10c00000-0000-4000-8000-000000000002", "org": "atrium-mall", "slug": "atrium-cinema", "name": "Atrium Cinema", "address": "Level 3, Atrium Mall, Saddar, Karachi", "lat": 24.8572, "lng": 67.0286, "desk_hours": "Mon–Sun 12:00–00:00" },
-    { "id": "10c00000-0000-4000-8000-000000000003", "org": "devfest-2026", "slug": "devfest-expo-hall", "name": "DevFest Expo Hall", "address": "Expo Centre, University Road, Karachi", "lat": 24.9036, "lng": 67.0778, "desk_hours": "Fri–Sun 09:00–20:00" }
+    {
+      "id": "10c00000-0000-4000-8000-000000000001",
+      "org": "atrium-mall",
+      "slug": "atrium-mall-main",
+      "name": "Atrium Mall",
+      "address": "Zaibunnisa Street, Saddar, Karachi",
+      "lat": 24.8569,
+      "lng": 67.0281,
+      "desk_hours": "Mon–Sun 10:00–22:00"
+    },
+    {
+      "id": "10c00000-0000-4000-8000-000000000002",
+      "org": "atrium-mall",
+      "slug": "atrium-cinema",
+      "name": "Atrium Cinema",
+      "address": "Level 3, Atrium Mall, Saddar, Karachi",
+      "lat": 24.8572,
+      "lng": 67.0286,
+      "desk_hours": "Mon–Sun 12:00–00:00"
+    },
+    {
+      "id": "10c00000-0000-4000-8000-000000000003",
+      "org": "devfest-2026",
+      "slug": "devfest-expo-hall",
+      "name": "DevFest Expo Hall",
+      "address": "Expo Centre, University Road, Karachi",
+      "lat": 24.9036,
+      "lng": 67.0778,
+      "desk_hours": "Fri–Sun 09:00–20:00"
+    }
   ],
   "staff": [
-    { "email": "staff@atrium.gumsum.test", "org": "atrium-mall", "display_name": "Ayesha Khan" },
-    { "email": "staff@devfest.gumsum.test", "org": "devfest-2026", "display_name": "Bilal Ahmed" }
+    {
+      "email": "staff@atrium.gumsum.test",
+      "org": "atrium-mall",
+      "display_name": "Ayesha Khan"
+    },
+    {
+      "email": "staff@devfest.gumsum.test",
+      "org": "devfest-2026",
+      "display_name": "Bilal Ahmed"
+    }
   ],
   "claimants": [
-    { "email": "sara@claimant.gumsum.test", "full_name": "Sara Malik", "phone_e164": "+923001234567" },
-    { "email": "omar@claimant.gumsum.test", "full_name": "Omar Siddiqui", "phone_e164": "+923211112233" },
-    { "email": "hina@claimant.gumsum.test", "full_name": "Hina Baig", "phone_e164": "+923334445566" },
-    { "email": "ali@claimant.gumsum.test", "full_name": "Ali Raza", "phone_e164": "+923451239876" }
+    {
+      "email": "sara@claimant.gumsum.test",
+      "full_name": "Sara Malik",
+      "phone_e164": "+923001234567"
+    },
+    {
+      "email": "omar@claimant.gumsum.test",
+      "full_name": "Omar Siddiqui",
+      "phone_e164": "+923211112233"
+    },
+    {
+      "email": "hina@claimant.gumsum.test",
+      "full_name": "Hina Baig",
+      "phone_e164": "+923334445566"
+    },
+    {
+      "email": "ali@claimant.gumsum.test",
+      "full_name": "Ali Raza",
+      "phone_e164": "+923451239876"
+    }
   ],
   "items": [
-    { "id": "17e00000-0000-4000-8000-000000000001", "location": "atrium-mall-main", "image": "backpack", "title": "Black backpack", "category": "bag", "colours": ["black"], "tags": ["backpack", "bag"], "exact_spot": "Food court, near gate 3", "hours_ago": 50,
-      "private_description": "Blue Nike water bottle inside, keychain shaped like a cat, small scratch near the zip.",
-      "details": ["blue Nike water bottle inside", "keychain shaped like a cat", "small scratch near the zip"] },
-    { "id": "17e00000-0000-4000-8000-000000000002", "location": "atrium-cinema", "image": "airpods", "title": "White earbuds case", "category": "electronics", "colours": ["white"], "tags": ["earbuds", "airpods", "headphones"], "exact_spot": "Cinema lobby", "hours_ago": 5,
-      "private_description": "Left earbud has a tiny chip on the stem, a yellow star sticker on the back of the case, initials M.A. engraved on the lid.",
-      "details": ["left earbud has a tiny chip on the stem", "yellow star sticker on the back of the case", "initials M.A. engraved on the lid"] },
-    { "id": "17e00000-0000-4000-8000-000000000003", "location": "devfest-expo-hall", "image": "bottle", "title": "Blue water bottle", "category": "bottle", "colours": ["blue"], "tags": ["bottle", "flask"], "exact_spot": "Row C, near the main stage", "hours_ago": 26,
-      "private_description": "Dent on the bottom rim, a Karachi Kings sticker on the side, the lid strap is broken.",
-      "details": ["dent on the bottom rim", "Karachi Kings sticker on the side", "lid strap is broken"] },
-    { "id": "17e00000-0000-4000-8000-000000000004", "location": "atrium-mall-main", "image": "wallet", "title": "Brown leather wallet", "category": "wallet", "colours": ["brown"], "tags": ["wallet", "leather"], "exact_spot": "Parking level 2 entrance", "hours_ago": 75,
-      "private_description": "Contains a Habib University library card, a photo of a golden retriever, stitching coming loose on one corner.",
-      "details": ["Habib University library card", "photo of a golden retriever", "stitching coming loose on one corner"] },
-    { "id": "17e00000-0000-4000-8000-000000000005", "location": "atrium-mall-main", "image": "umbrella", "title": "Red umbrella", "category": "umbrella", "colours": ["red"], "tags": ["umbrella"], "exact_spot": "Main entrance", "hours_ago": 140,
-      "private_description": "Wooden handle with initials carved into it, one bent spoke, white polka dots on the inside.",
-      "details": ["wooden handle with carved initials", "one bent spoke", "white polka dots on the inside"] },
-    { "id": "17e00000-0000-4000-8000-000000000006", "location": "atrium-mall-main", "image": "keys", "title": "Set of keys", "category": "keys", "colours": ["silver", "gold"], "tags": ["keys", "keyring"], "exact_spot": "Washroom corridor", "hours_ago": 4,
-      "private_description": "Three keys including a small blue-capped one, a bottle opener keyring, a paper tag that says Home.",
-      "details": ["three keys including a small blue-capped one", "bottle opener keyring", "paper tag that says Home"] },
-    { "id": "17e00000-0000-4000-8000-000000000007", "location": "atrium-cinema", "image": "hoodie", "title": "Grey hoodie", "category": "clothing", "colours": ["grey"], "tags": ["hoodie", "sweatshirt"], "exact_spot": "Screen 2, row J", "hours_ago": 30,
-      "private_description": "Size M, a white paint stain on the left sleeve, a metro card in the front pocket.",
-      "details": ["size M", "white paint stain on the left sleeve", "metro card in the front pocket"] },
-    { "id": "17e00000-0000-4000-8000-000000000008", "location": "atrium-mall-main", "image": "sunglasses", "title": "Black sunglasses", "category": "accessories", "colours": ["black"], "tags": ["sunglasses", "glasses"], "exact_spot": "Food court", "hours_ago": 8,
-      "private_description": "Ray-Ban logo on the left lens, scratch on the right lens, usually kept in a brown soft pouch.",
-      "details": ["Ray-Ban logo on the left lens", "scratch on the right lens", "brown soft pouch"] },
-    { "id": "17e00000-0000-4000-8000-000000000009", "location": "devfest-expo-hall", "image": "phone", "title": "Black smartphone", "category": "electronics", "colours": ["black"], "tags": ["phone", "smartphone", "mobile"], "exact_spot": "Registration desk", "hours_ago": 2,
-      "private_description": "Lock screen shows a sunset over the sea, cracked top-left corner, a folded receipt tucked inside the clear case.",
-      "details": ["lock screen shows a sunset over the sea", "cracked top-left corner", "folded receipt inside the clear case"] },
-    { "id": "17e00000-0000-4000-8000-000000000010", "location": "atrium-mall-main", "image": "teddy", "title": "Brown teddy bear", "category": "toy", "colours": ["brown"], "tags": ["teddy", "toy", "bear"], "exact_spot": "Kids play area", "hours_ago": 49,
-      "private_description": "Red bow tie, the left eye button is missing, the name Coco is stitched on one foot.",
-      "details": ["red bow tie", "left eye button missing", "name Coco stitched on one foot"] },
-    { "id": "17e00000-0000-4000-8000-000000000011", "location": "devfest-expo-hall", "image": "notebook", "title": "Green notebook", "category": "stationery", "colours": ["green"], "tags": ["notebook", "journal"], "exact_spot": "Hall B, workshop room", "hours_ago": 22,
-      "private_description": "Sketch of a robot on the first page, a Wi-Fi password written on the back cover, the elastic band is torn.",
-      "details": ["sketch of a robot on the first page", "Wi-Fi password on the back cover", "elastic band is torn"] },
-    { "id": "17e00000-0000-4000-8000-000000000012", "location": "atrium-cinema", "image": "jacket", "title": "Denim jacket", "category": "clothing", "colours": ["blue"], "tags": ["jacket", "denim"], "exact_spot": "Cinema lobby", "hours_ago": 72,
-      "private_description": "Embroidered cactus patch on the back, size L, a lip balm in the inner pocket.",
-      "details": ["embroidered cactus patch on the back", "size L", "lip balm in the inner pocket"] }
+    {
+      "id": "17e00000-0000-4000-8000-000000000001",
+      "location": "atrium-mall-main",
+      "image": "phone",
+      "images": 3,
+      "title": "Blue iPhone",
+      "category": "phone",
+      "colours": [
+        "blue"
+      ],
+      "tags": [
+        "phone",
+        "iphone",
+        "smartphone",
+        "mobile"
+      ],
+      "exact_spot": "Food court, near gate 3",
+      "hours_ago": 20,
+      "private_description": "Small chip on the bottom-left corner of the back glass, scratches on the camera lens rings, home screen shows a Karachi weather widget.",
+      "details": [
+        "small chip on the bottom-left corner of the back glass",
+        "scratches on the camera lens rings",
+        "home screen shows a Karachi weather widget"
+      ]
+    },
+    {
+      "id": "17e00000-0000-4000-8000-000000000002",
+      "location": "atrium-cinema",
+      "image": "rings",
+      "images": 2,
+      "title": "Two gold rings",
+      "category": "jewellery",
+      "colours": [
+        "gold"
+      ],
+      "tags": [
+        "ring",
+        "rings",
+        "jewellery",
+        "gold"
+      ],
+      "exact_spot": "Screen 2 lobby",
+      "hours_ago": 6,
+      "private_description": "The wider ring is engraved A & S 2019 on the inside, the smaller ring is slightly bent, both were tied together with a red thread.",
+      "details": [
+        "wider ring engraved A & S 2019 on the inside",
+        "smaller ring is slightly bent",
+        "tied together with a red thread"
+      ]
+    },
+    {
+      "id": "17e00000-0000-4000-8000-000000000003",
+      "location": "devfest-expo-hall",
+      "image": "licence",
+      "images": 2,
+      "title": "Driver licence card",
+      "category": "documents",
+      "colours": [
+        "white"
+      ],
+      "tags": [
+        "id",
+        "card",
+        "licence",
+        "license"
+      ],
+      "exact_spot": "Registration desk",
+      "hours_ago": 3,
+      "private_description": "Issued in California, the cardholder's first name starts with L, it was inside a black card sleeve with a metro card.",
+      "details": [
+        "issued in California",
+        "first name starts with L",
+        "inside a black card sleeve with a metro card"
+      ]
+    }
   ],
   "claims": [
-    { "id": "c1a10000-0000-4000-8000-000000000001", "item": "17e00000-0000-4000-8000-000000000001", "claimant": "sara@claimant.gumsum.test", "hours_ago": 20, "followups_asked": 1,
+    {
+      "id": "c1a10000-0000-4000-8000-000000000001",
+      "item": "17e00000-0000-4000-8000-000000000001",
+      "claimant": "sara@claimant.gumsum.test",
+      "hours_ago": 10,
+      "followups_asked": 1,
       "messages": [
-        ["bot", "Tell us why this is yours. Describe anything only the owner would know, like what's inside, marks or stickers."],
-        ["user", "It's my black backpack. There's a blue Nike bottle inside and a little cat keychain on the zip."],
-        ["bot", "Any marks, stickers or damage?"],
-        ["user", "I think there's a small scratch somewhere near the zipper."],
-        ["bot", "Thanks, your request was submitted. The team will review it and we'll notify you."]
+        [
+          "bot",
+          "Tell us why this is yours. Describe anything only the owner would know, like what's inside, marks or stickers."
+        ],
+        [
+          "user",
+          "It's my blue iPhone. The camera lens rings are scratched and my home screen has the Karachi weather widget."
+        ],
+        [
+          "bot",
+          "Any marks, stickers or damage?"
+        ],
+        [
+          "user",
+          "I think there's a small chip on a corner of the back glass."
+        ],
+        [
+          "bot",
+          "Thanks, your request was submitted. The team will review it and we'll notify you."
+        ]
       ],
-      "rationale": { "details": [
-        { "idx": 0, "verdict": "match", "evidence": "mentions a blue Nike bottle inside" },
-        { "idx": 1, "verdict": "match", "evidence": "mentions a cat keychain on the zip" },
-        { "idx": 2, "verdict": "partial", "evidence": "says 'a small scratch somewhere near the zipper'" }
-      ], "photo_consistency": "consistent", "proof_photo": "none", "summary": "Strong match on contents and keychain; scratch described loosely." } },
-    { "id": "c1a10000-0000-4000-8000-000000000002", "item": "17e00000-0000-4000-8000-000000000001", "claimant": "hina@claimant.gumsum.test", "hours_ago": 12, "followups_asked": 2,
+      "rationale": {
+        "details": [
+          {
+            "idx": 0,
+            "verdict": "partial",
+            "evidence": "says 'a small chip on a corner of the back glass'"
+          },
+          {
+            "idx": 1,
+            "verdict": "match",
+            "evidence": "says the camera lens rings are scratched"
+          },
+          {
+            "idx": 2,
+            "verdict": "match",
+            "evidence": "mentions the Karachi weather widget"
+          }
+        ],
+        "photo_consistency": "consistent",
+        "proof_photo": "none",
+        "summary": "Strong match on lens scratches and home screen; chip described loosely."
+      }
+    },
+    {
+      "id": "c1a10000-0000-4000-8000-000000000002",
+      "item": "17e00000-0000-4000-8000-000000000001",
+      "claimant": "hina@claimant.gumsum.test",
+      "hours_ago": 8,
+      "followups_asked": 2,
       "messages": [
-        ["bot", "Tell us why this is yours. Describe anything only the owner would know, like what's inside, marks or stickers."],
-        ["user", "It's a black bag, I had a water bottle in it."],
-        ["bot", "Anything attached to it?"],
-        ["user", "Maybe a keyring, I'm not sure."],
-        ["bot", "Any marks, stickers or damage?"],
-        ["user", "I don't know"],
-        ["bot", "Thanks, your request was submitted. The team will review it and we'll notify you."]
+        [
+          "bot",
+          "Tell us why this is yours. Describe anything only the owner would know, like what's inside, marks or stickers."
+        ],
+        [
+          "user",
+          "It's my blue iPhone, it has some scratches I think."
+        ],
+        [
+          "bot",
+          "Any marks, stickers or damage?"
+        ],
+        [
+          "user",
+          "Maybe near the camera."
+        ],
+        [
+          "bot",
+          "Is there anything else that makes it yours?"
+        ],
+        [
+          "user",
+          "I don't know"
+        ],
+        [
+          "bot",
+          "Thanks, your request was submitted. The team will review it and we'll notify you."
+        ]
       ],
-      "rationale": { "details": [
-        { "idx": 0, "verdict": "partial", "evidence": "mentions a water bottle, no colour or brand" },
-        { "idx": 1, "verdict": "partial", "evidence": "says 'maybe a keyring'" },
-        { "idx": 2, "verdict": "none", "evidence": "no mention of a scratch" }
-      ], "photo_consistency": "consistent", "proof_photo": "none", "summary": "Vague partial matches; no specific details." } },
-    { "id": "c1a10000-0000-4000-8000-000000000003", "item": "17e00000-0000-4000-8000-000000000001", "claimant": "omar@claimant.gumsum.test", "hours_ago": 6, "followups_asked": 2,
+      "rationale": {
+        "details": [
+          {
+            "idx": 0,
+            "verdict": "none",
+            "evidence": "no mention of a chip"
+          },
+          {
+            "idx": 1,
+            "verdict": "partial",
+            "evidence": "says 'maybe near the camera'"
+          },
+          {
+            "idx": 2,
+            "verdict": "none",
+            "evidence": "no mention of the home screen"
+          }
+        ],
+        "photo_consistency": "consistent",
+        "proof_photo": "none",
+        "summary": "Vague; only a loose mention of scratches near the camera."
+      }
+    },
+    {
+      "id": "c1a10000-0000-4000-8000-000000000003",
+      "item": "17e00000-0000-4000-8000-000000000001",
+      "claimant": "omar@claimant.gumsum.test",
+      "hours_ago": 4,
+      "followups_asked": 2,
       "messages": [
-        ["bot", "Tell us why this is yours. Describe anything only the owner would know, like what's inside, marks or stickers."],
-        ["user", "Black backpack with my laptop and charger inside it."],
-        ["bot", "Anything attached to it?"],
-        ["user", "No, nothing attached."],
-        ["bot", "Any marks, stickers or damage?"],
-        ["user", "It's brand new, no marks at all."],
-        ["bot", "Thanks, your request was submitted. The team will review it and we'll notify you."]
+        [
+          "bot",
+          "Tell us why this is yours. Describe anything only the owner would know, like what's inside, marks or stickers."
+        ],
+        [
+          "user",
+          "That's my black iPhone with a red case on it."
+        ],
+        [
+          "bot",
+          "Any marks, stickers or damage?"
+        ],
+        [
+          "user",
+          "No, it's brand new, no marks at all."
+        ],
+        [
+          "bot",
+          "Is there anything else that makes it yours?"
+        ],
+        [
+          "user",
+          "My wallpaper is a photo of my car."
+        ],
+        [
+          "bot",
+          "Thanks, your request was submitted. The team will review it and we'll notify you."
+        ]
       ],
-      "rationale": { "details": [
-        { "idx": 0, "verdict": "contradiction", "evidence": "says a laptop and charger were inside" },
-        { "idx": 1, "verdict": "contradiction", "evidence": "says nothing was attached" },
-        { "idx": 2, "verdict": "contradiction", "evidence": "says there are no marks at all" }
-      ], "photo_consistency": "unclear", "proof_photo": "none", "summary": "Contents, attachments and condition all contradict the record." } },
-    { "id": "c1a10000-0000-4000-8000-000000000004", "item": "17e00000-0000-4000-8000-000000000002", "claimant": "ali@claimant.gumsum.test", "hours_ago": 2, "followups_asked": 1,
+      "rationale": {
+        "details": [
+          {
+            "idx": 0,
+            "verdict": "contradiction",
+            "evidence": "says there are no marks at all"
+          },
+          {
+            "idx": 1,
+            "verdict": "contradiction",
+            "evidence": "says it is brand new"
+          },
+          {
+            "idx": 2,
+            "verdict": "contradiction",
+            "evidence": "says the wallpaper is a car photo"
+          }
+        ],
+        "photo_consistency": "inconsistent",
+        "proof_photo": "none",
+        "summary": "Colour, condition and home screen all contradict the record."
+      }
+    },
+    {
+      "id": "c1a10000-0000-4000-8000-000000000004",
+      "item": "17e00000-0000-4000-8000-000000000002",
+      "claimant": "ali@claimant.gumsum.test",
+      "hours_ago": 2,
+      "followups_asked": 1,
       "messages": [
-        ["bot", "Tell us why this is yours. Describe anything only the owner would know, like what's inside, marks or stickers."],
-        ["user", "White AirPods case, it has a yellow star sticker on the back."],
-        ["bot", "Is there anything else that makes it yours, like marks or engravings?"],
-        ["user", "I don't know"],
-        ["bot", "Thanks, your request was submitted. The team will review it and we'll notify you."]
+        [
+          "bot",
+          "Tell us why this is yours. Describe anything only the owner would know, like what's inside, marks or stickers."
+        ],
+        [
+          "user",
+          "Two gold wedding rings, the big one has our initials and 2019 engraved inside."
+        ],
+        [
+          "bot",
+          "Anything attached to it?"
+        ],
+        [
+          "user",
+          "I don't know"
+        ],
+        [
+          "bot",
+          "Thanks, your request was submitted. The team will review it and we'll notify you."
+        ]
       ],
-      "rationale": { "details": [
-        { "idx": 0, "verdict": "none", "evidence": "no mention of the chipped stem" },
-        { "idx": 1, "verdict": "match", "evidence": "mentions a yellow star sticker on the back" },
-        { "idx": 2, "verdict": "none", "evidence": "no mention of engraved initials" }
-      ], "photo_consistency": "consistent", "proof_photo": "none", "summary": "One strong specific match; other details not mentioned." } }
+      "rationale": {
+        "details": [
+          {
+            "idx": 0,
+            "verdict": "match",
+            "evidence": "says initials and 2019 engraved inside"
+          },
+          {
+            "idx": 1,
+            "verdict": "none",
+            "evidence": "no mention of a bent ring"
+          },
+          {
+            "idx": 2,
+            "verdict": "none",
+            "evidence": "no mention of the red thread"
+          }
+        ],
+        "photo_consistency": "consistent",
+        "proof_photo": "none",
+        "summary": "One specific match on the engraving; other details not mentioned."
+      }
+    }
   ]
 }

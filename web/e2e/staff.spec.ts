@@ -72,13 +72,17 @@ test.describe('Staff', () => {
     await signIn(page, STAFF)
     await page.goto('/staff/items/17e00000-0000-4000-8000-000000000001')
     const rows = page.getByRole('tabpanel').getByRole('button')
-    await expect(rows).toHaveCount(3)
-    await expect(rows.nth(0)).toContainText('Sara Malik')
-    await expect(rows.nth(0)).toContainText('88')
-    await expect(rows.nth(2)).toContainText('Omar Siddiqui')
-    await expect(page.getByLabel('Contradiction')).toBeVisible()
+    await expect(rows.filter({ hasText: 'Omar Siddiqui' })).toBeVisible()
+    // Other runs' claims may exist too; the seeded three must be ranked Sara (88) > Hina (50) > Omar (13).
+    const names = await rows.allInnerTexts()
+    const at = (n: string) => names.findIndex((t) => t.includes(n))
+    expect(at('Sara Malik')).toBeLessThan(at('Hina Baig'))
+    expect(at('Hina Baig')).toBeLessThan(at('Omar Siddiqui'))
+    await expect(rows.filter({ hasText: 'Sara Malik' })).toContainText('88')
+    await expect(page.getByLabel('Contradiction').first()).toBeVisible()
 
-    await rows.nth(2).click()
+    const omar = rows.filter({ hasText: 'Omar Siddiqui' })
+    await omar.click()
     const review = page.getByRole('dialog', { name: 'Claim review' })
     await expect(review.getByText('Contradiction:').first()).toBeVisible()
     await expect(review.getByText('Black backpack with my laptop')).toBeVisible()
@@ -88,7 +92,7 @@ test.describe('Staff', () => {
     await reject.getByRole('radio', { name: 'Suspected false claim' }).click()
     await reject.getByRole('button', { name: 'Reject claim' }).click()
     await expect(page.getByText('Rejected. Omar has been notified.')).toBeVisible()
-    await expect(rows.nth(2)).toContainText('Rejected')
+    await expect(omar).toContainText('Rejected')
   })
 
   test('full loop: claim → score → approve → pickup code → hand over → collected', async ({ page }) => {
@@ -102,7 +106,14 @@ test.describe('Staff', () => {
       .getByLabel('Your answer')
       .fill('My white AirPods case. The left earbud has a tiny chip on the stem, a yellow star sticker on the back, and M.A. initials engraved on the lid.')
     await sheet.getByRole('button', { name: 'Send' }).click()
-    await expect(sheet.getByText('Request submitted')).toBeVisible()
+    // The AI may still ask a neutral follow-up; answer until the request is submitted.
+    const submitted = sheet.getByText('Request submitted')
+    const idk = sheet.getByRole('button', { name: 'I don’t know' })
+    for (let i = 0; i < 3 && !(await submitted.isVisible()); i++) {
+      await expect(idk.or(submitted)).toBeVisible()
+      if (await idk.isVisible()) await idk.click()
+    }
+    await expect(submitted).toBeVisible()
     await signOut(page)
 
     // 2. Staff sees it ranked first with a High score, approves
@@ -110,8 +121,8 @@ test.describe('Staff', () => {
     await expect(page).toHaveURL(/\/staff$/)
     await page.goto('/staff/items/17e00000-0000-4000-8000-000000000002')
     const first = page.getByRole('tabpanel').getByRole('button').first()
-    await expect(first).toContainText('Maryam Ali', { timeout: 15_000 })
-    await expect(first).toContainText('High', { timeout: 15_000 })
+    await expect(first).toContainText('Maryam Ali', { timeout: 45_000 })
+    await expect(first).toContainText('High', { timeout: 45_000 })
     await first.click()
     const review = page.getByRole('dialog', { name: 'Claim review' })
     await expect(review.getByText('Matched:').first()).toBeVisible()

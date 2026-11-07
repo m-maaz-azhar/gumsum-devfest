@@ -43,7 +43,8 @@ async function request<T>(method: Method, path: string, body?: unknown): Promise
   if (!res.ok) {
     throw new ApiError(res.status, json?.error ?? { code: 'HTTP_' + res.status, message: 'Something went wrong. Try again.' })
   }
-  return json as T
+  // The Flask API wraps every success body as { data: ... }.
+  return (json && typeof json === 'object' && 'data' in json ? json.data : json) as T
 }
 
 export const api = {
