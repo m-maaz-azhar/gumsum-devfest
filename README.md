@@ -61,9 +61,12 @@ E2E tests get sign-in codes from the Admin API (`generate_link`), so no email is
 
 These `.test` addresses can't receive email. To sign in by hand, add your own email as staff (insert a `staff_members` row) or use a real inbox as a claimant.
 
-## Before the demo
+## Auth email (done)
 
-1. **Email delivery.** Supabase's built-in mailer only sends to your project's team members and allows a few emails an hour. Add custom SMTP (for example Resend) under Authentication → Emails.
-2. **Code in the email.** Edit the *Magic Link* and *Confirm signup* email templates to include `{{ .Token }}`. The app asks for a typed code, not a link.
-3. **Code length.** The project sends 8-digit codes and the spec says 6. Set Authentication → Providers → Email → OTP length to 6, then set `VITE_OTP_LENGTH=6` in Vercel and redeploy.
-4. **Push.** Set `VITE_VAPID_PUBLIC_KEY` once Flask has VAPID keys.
+Sign-in emails come from Resend (`gumsum@texvnx.com`) and contain a **6-digit code** that expires in 10 minutes, not a link. The templates live in `supabase/templates/`; re-apply them with:
+
+```bash
+node --env-file=.env --env-file=web/.env.local supabase/scripts/apply-auth-config.ts   # needs SUPABASE_ACCESS_TOKEN
+```
+
+Still to do: set `VITE_VAPID_PUBLIC_KEY` once Flask has VAPID keys (push notifications).

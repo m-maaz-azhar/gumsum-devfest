@@ -8,5 +8,5 @@ export const SUPABASE_ANON_KEY = env.VITE_SUPABASE_ANON_KEY as string
 export const API_URL = ((env.VITE_API_URL as string) || '').replace(/\/$/, '')
 export const USE_MOCK_API = !API_URL
 export const VAPID_PUBLIC_KEY = (env.VITE_VAPID_PUBLIC_KEY as string) || ''
-/** Length of the Supabase email code. The spec says 6; this project currently sends 8. */
+/** Length of the Supabase email code (6 per USR-ONB-02). */
 export const OTP_LENGTH = Number(env.VITE_OTP_LENGTH || 6)

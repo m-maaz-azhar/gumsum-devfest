@@ -23,7 +23,7 @@ The direct host `db.<ref>.supabase.co` is IPv6 only; use the session pooler abov
 ## Notes for the Flask API
 
 - **Seeded logins:** `staff@atrium.gumsum.test` (Atrium Mall), `staff@devfest.gumsum.test` (DevFest 2026), and claimants `sara@`, `omar@`, `hina@`, `ali@claimant.gumsum.test`. Get a code without email via `POST /auth/v1/admin/generate_link {type:"magiclink", email}`, which returns `email_otp`.
-- **OTP length:** this project issues **8-digit** codes. The spec says 6: change it in Dashboard → Authentication → Providers → Email → *Email OTP Length*, then set `VITE_OTP_LENGTH=6` in the web app.
+- **OTP:** 6-digit email codes, 10-minute expiry, sent through Resend SMTP. Templates in `templates/`, applied by `scripts/apply-auth-config.ts`.
 - **Claim states:** `claims.score_state` is `pending | done | failed` (drives "Scoring…" and "Score unavailable"). `claims.chat_done` marks the end of the chat; `status` follows the Status Model sheet.
 - **One approved claim per item** is enforced by the partial unique index `claims_one_approved_per_item`.
 - **Search:** `search_items(query_embedding, what_text, where_text, lat, lng, p_location_id, page, page_size)` ranks `0.7 * vector + 0.3 * trigram`, or trigram alone when `query_embedding` is null. It returns `where_matched` (null when there was no where, false when the place was not recognised). Seeded items have no embeddings yet; backfill them from `title + category + colours + tags`.
