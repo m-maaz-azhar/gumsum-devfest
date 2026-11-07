@@ -53,7 +53,7 @@ export function SearchBox({
         }
       }}
     >
-      <motion.div layoutId="search-bar" className="flex h-12 items-center gap-2 rounded-full bg-fill pr-1 pl-4">
+      <motion.div layoutId="search-bar" className="flex h-12 items-center gap-2 rounded-full border-[1.5px] border-transparent bg-fill pr-1 pl-4 transition-colors focus-within:border-ink">
         <Search size={20} strokeWidth={1.75} className="shrink-0 text-ink-2" aria-hidden />
         <input
           ref={ref}

@@ -43,6 +43,8 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string | null
   shakeKey?: unknown
   trailing?: ReactNode
+  /** BigInput only: render without the message line (the caller shows it). */
+  bare?: boolean
 }
 
 /** Standard input (DESIGN §4): 52px, --fill at rest, 1.5px ink border on focus. */
@@ -79,7 +81,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({ l
 })
 
 /** Big question input for step forms: 28px text over a 2px bottom line. */
-export const BigInput = forwardRef<HTMLInputElement, InputProps>(function BigInput({ helper, error, shakeKey, className, id, label, ...rest }, ref) {
+export const BigInput = forwardRef<HTMLInputElement, InputProps>(function BigInput({ helper, error, shakeKey, className, id, label, bare, ...rest }, ref) {
   const autoId = useId()
   const inputId = id ?? autoId
   const controls = useShake(shakeKey)
@@ -99,7 +101,7 @@ export const BigInput = forwardRef<HTMLInputElement, InputProps>(function BigInp
           {...rest}
         />
       </motion.div>
-      <FieldMessage id={`${inputId}-msg`} error={error} helper={helper} />
+      {!bare && <FieldMessage id={`${inputId}-msg`} error={error} helper={helper} />}
     </div>
   )
 })

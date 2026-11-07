@@ -92,9 +92,18 @@ select,
 label {
   touch-action: manipulation;
 }
-:focus-visible {
-  outline: 2px solid var(--ink);
-  outline-offset: 2px;
+/* Focus ring for buttons, links and other controls (DESIGN §9). In the base layer so utilities can
+   override it, and not on text fields, which show focus with their own border or underline. */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+  input:not([type='checkbox']):not([type='radio']):focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline: none;
+  }
 }
 .tabular {
   font-variant-numeric: tabular-nums;

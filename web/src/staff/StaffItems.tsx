@@ -73,7 +73,7 @@ export default function StaffItems() {
           ))}
         </div>
         <div className="mt-3 flex items-center gap-2 px-5">
-          <div className="flex h-11 flex-1 items-center gap-2 rounded-full bg-fill pr-1 pl-4">
+          <div className="flex h-11 flex-1 items-center gap-2 rounded-full border-[1.5px] border-transparent bg-fill pr-1 pl-4 transition-colors focus-within:border-ink">
             <Search size={18} className="text-ink-2" aria-hidden />
             <input
               type="search"

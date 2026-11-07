@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getCountries, getCountryCallingCode, parsePhoneNumberFromString, AsYouType } from 'libphonenumber-js/min'
-import { MapPin } from 'lucide-react'
+import { ChevronDown, MapPin } from 'lucide-react'
 import { nameSchema, phoneSchema, firstError } from '../shared/schemas'
 import { useUpdateMe } from '../shared/api/hooks'
 import { Button, TextButton } from '../shared/ui/Button'
@@ -63,10 +63,28 @@ export function NameStep() {
   )
 }
 
+// Time zone is a better hint than language (an en-US phone in Karachi should default to Pakistan).
+const TZ_REGION: Record<string, string> = {
+  'Asia/Karachi': 'PK', 'Asia/Kolkata': 'IN', 'Asia/Calcutta': 'IN', 'Asia/Dhaka': 'BD', 'Asia/Dubai': 'AE',
+  'Asia/Riyadh': 'SA', 'Asia/Qatar': 'QA', 'Asia/Kuwait': 'KW', 'Asia/Bahrain': 'BH', 'Asia/Muscat': 'OM',
+  'Asia/Kabul': 'AF', 'Asia/Tehran': 'IR', 'Europe/Istanbul': 'TR', 'Europe/London': 'GB', 'Europe/Dublin': 'IE',
+  'Europe/Berlin': 'DE', 'Europe/Paris': 'FR', 'Asia/Singapore': 'SG', 'Asia/Kuala_Lumpur': 'MY', 'Australia/Sydney': 'AU',
+}
+
 function defaultRegion() {
-  const tag = navigator.language || 'en-PK'
-  const region = tag.split('-')[1]?.toUpperCase()
-  return region && (getCountries() as string[]).includes(region) ? region : 'PK'
+  const countries = getCountries() as string[]
+  try {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
+    if (TZ_REGION[tz]) return TZ_REGION[tz]
+    if (tz.startsWith('America/')) {
+      const r = (navigator.language || '').split('-')[1]?.toUpperCase()
+      if (r && countries.includes(r)) return r
+    }
+  } catch {
+    /* fall through */
+  }
+  const region = (navigator.language || '').split('-')[1]?.toUpperCase()
+  return region && countries.includes(region) && region !== 'US' ? region : 'PK'
 }
 
 export function PhoneStep() {
@@ -117,8 +135,8 @@ export function PhoneStep() {
                 setCountry(e.target.value)
                 setServerError(null)
               }}
-              className="h-11 appearance-none rounded-input bg-fill pr-3 pl-3 text-body text-ink outline-none focus:ring-[1.5px] focus:ring-ink"
               aria-label="Country"
+              className="appearance-none rounded-none border-0 border-b-2 border-line bg-transparent pr-7 pb-2 text-[1.75rem] leading-9 text-ink outline-none transition-colors focus:border-ink"
             >
               {countries.map((c) => (
                 <option key={c.code} value={c.code}>
@@ -126,10 +144,13 @@ export function PhoneStep() {
                 </option>
               ))}
             </select>
+            <ChevronDown size={20} strokeWidth={1.75} aria-hidden className="pointer-events-none absolute right-0 bottom-3.5 text-ink-3" />
           </label>
           <BigInput
             label="Phone number"
-            className="flex-1"
+            className="min-w-0 flex-1"
+            bare
+            aria-describedby="phone-msg"
             type="tel"
             inputMode="tel"
             autoComplete="tel-national"
@@ -141,6 +162,7 @@ export function PhoneStep() {
               setServerError(null)
             }}
             onBlur={() => phone && setTouched(true)}
+            error={error}
             shakeKey={shake}
           />
         </div>
