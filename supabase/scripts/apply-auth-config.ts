@@ -6,6 +6,8 @@
 //
 // Needs SUPABASE_URL and SUPABASE_ACCESS_TOKEN (a personal access token, sbp_…, from
 // https://supabase.com/dashboard/account/tokens). The token is only used for this request.
+// On the free plan also set SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS and optionally
+// SMTP_SENDER_EMAIL / SMTP_SENDER_NAME (e.g. Gmail: smtp.gmail.com, 587, you@gmail.com, app password).
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
@@ -20,7 +22,21 @@ if (!token || !ref) {
 
 const template = (name: string) => readFileSync(join(here, '../templates', `${name}.html`), 'utf8')
 
+// Free-tier projects can only change templates with a custom SMTP provider, so set it in the same call.
+const smtp = process.env.SMTP_HOST
+  ? {
+      smtp_host: process.env.SMTP_HOST,
+      smtp_port: process.env.SMTP_PORT || '587',
+      smtp_user: process.env.SMTP_USER,
+      smtp_pass: process.env.SMTP_PASS,
+      smtp_admin_email: process.env.SMTP_SENDER_EMAIL || process.env.SMTP_USER,
+      smtp_sender_name: process.env.SMTP_SENDER_NAME || 'Gumsum',
+      rate_limit_email_sent: 100,
+    }
+  : {}
+
 const config = {
+  ...smtp,
   mailer_otp_length: 6,
   mailer_otp_exp: 600,
   mailer_subjects_confirmation: 'Your Gumsum code',
