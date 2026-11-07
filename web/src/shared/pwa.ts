@@ -4,8 +4,23 @@ import { VAPID_PUBLIC_KEY } from '../config'
 
 export function registerServiceWorker() {
   if (!('serviceWorker' in navigator) || import.meta.env.DEV) return
+  // When a new deploy's service worker takes control, reload once so the page runs the new code
+  // instead of the previously cached bundle. Skipped on the very first install (no old controller).
+  const hadController = !!navigator.serviceWorker.controller
+  let reloaded = false
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!hadController || reloaded) return
+    reloaded = true
+    window.location.reload()
+  })
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(() => {})
+    navigator.serviceWorker
+      .register('/sw.js', { scope: '/' })
+      .then((reg) => {
+        // Check for a new version whenever the app comes back to the foreground.
+        document.addEventListener('visibilitychange', () => document.visibilityState === 'visible' && reg.update().catch(() => {}))
+      })
+      .catch(() => {})
   })
 }
 
